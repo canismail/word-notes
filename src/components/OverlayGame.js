@@ -37,7 +37,7 @@ const GamerOverlay = () => {
     var max = await db.getMax();
 
     if (max < 5) {
-      alert('Bu Oyun İçin Yeterli Kelime Kaydetmelisiniz!');
+      alert('Bu Oyun İçin Yeterli Kelime(5) Kaydetmelisiniz!');
       setVisible(visible);
       return;
     }

@@ -15,6 +15,7 @@
     "@react-native-community/masked-view": "^0.1.7",
     "@react-navigation/native": "^5.0.9",
     "@react-navigation/stack": "^5.1.1",
+    "axios": "^0.21.1",
     "cordova-plugin-sqlite": "^1.0.3",
     "deep-diff": "^1.0.2",
     "galio-framework": "^0.6.3",

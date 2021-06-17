@@ -1,34 +1,15 @@
 import * as React from 'react';
-import { View, Button, Text, Animated, StyleSheet, TextInput, ToastAndroid } from 'react-native';
+import { View, Animated, StyleSheet, TextInput, ToastAndroid } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import DbWrapper from './src/components/DbWrapper';
 import Mybutton from './src/components/Button'
 import GamerOverlay from './src/components/OverlayGame';
-import MyWeb from './src/components/WebView'
-import { RectButton } from 'react-native-gesture-handler';
+import ChangeText from './src/components/ChangeText'
 
 
 var dbService = new DbWrapper()
-
-
-var state = {
-  word: "Type here to Word!",
-  meaning: "Type here to Meaning!"
-};
-function setWord(pWord) {
-  state.word = pWord;
-};
-function setMeaning(pMeaning) {
-  state.meaning = pMeaning;
-}
-function getWord(pWord) {
-  return state.word;
-};
-function getMeaning(pMeaning) {
-  return state.meaning;
-}
 
 
 const Stack = createStackNavigator();
@@ -39,7 +20,9 @@ export default class App extends React.Component {
 
     this.state = {
       word: "Type here to Word!",
-      meaning: "Type here to Meaning!"
+      meaning: "Type here to Meaning!",
+      text:"deneme",
+      appText: 'Hello World'
     }
 
     dbService.init();
@@ -50,19 +33,12 @@ export default class App extends React.Component {
     ToastAndroid.show(text,ToastAndroid.SHORT)
   }
 
-  Refresh = () => {
-   this.Show(this.state.word) 
-  }
-
-  Save = () => {
-    if (getWord() === "Type here to Word!" || getMeaning() === "Type here to Meaning!") {
-      alert('İki Alanda Boş Olamaz!')
+  Save = (word,meaning) => {
+    if (word === "" || meaning === "") {
+      alert('İki Alanda Boş Olamaz!' + meaning)
       return;
     }
-    dbService.save(getWord(), getMeaning());
-    setWord("Type here to Word!");
-    this.setState({ word: "Type here to Word!" });
-    this.setState({ meaning: "Type here to Meaning!" });
+    dbService.save(word, meaning);
   }
 
   forFade = ({ current, next }) => {
@@ -90,47 +66,16 @@ export default class App extends React.Component {
     );
   }
 
-  Web = () => {
-    return (
-      <View>
-        <MyWeb />
-      </View>
-    );
-  }
+
 
   Home = ({ navigation }) => {
     return (
       <View>
-        <View style={styles.inputTextWord}>
-          <TextInput
-            textAlign={'center'}
-            placeholder={this.state.word}
-            onChangeText={(value) => setWord(value)}
-          //value={state.text}
-          />
-        </View>
-        <View style={styles.inputTextMeaning}>
-          <TextInput
-            textAlign={'center'}
-            placeholder={this.state.meaning}
-            onChangeText={(value) => setMeaning(value)}
-          //value={state.text}
-          />
-        </View>
-        <Mybutton
-          title="Save"
-          style={styles.saveButton}
-          customClick={() => this.Save()}
-        />
+        <ChangeText save={this.Save} />
         <Mybutton
           title="Start Games "
           style={styles.gameButton}
           customClick={() => navigation.navigate('Games')}
-        />
-        <Mybutton
-          title="WebView"
-          style={styles.webview}
-          customClick={() => this.Refresh()}
         />
       </View>
     );
@@ -153,11 +98,7 @@ export default class App extends React.Component {
             component={this.GameScreen}
             options={{ headerStyleInterpolator: this.forFade }}
           />
-          <Stack.Screen
-            name="Web"
-            component={this.Web}
-            options={{ headerStyleInterpolator: this.forFade }}
-          />
+         
         </Stack.Navigator>
       </NavigationContainer>
     );
@@ -167,38 +108,6 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   scrollView: {
     backgroundColor: Colors.RED,
-  },
-  inputTextMeaning: {
-    height: 40,
-    width: 270,
-    top: 280,
-    left: 85,
-    justifyContent: 'center',
-    alignItems: 'center',
-    //borderRadius: 10,
-    //flex: 1, 
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 10,
-    color: Colors.dark,
-  },
-  inputTextWord: {
-    height: 40,
-    width: 270,
-    top: 270,
-    left: 85,
-    justifyContent: 'center',
-    alignItems: 'center',
-    //borderRadius: 10,
-    //flex: 1, 
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 10,
-    color: Colors.dark,
   },
   engine: {
     position: 'absolute',
@@ -216,21 +125,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: Colors.black,
   },
-  saveButton: {
-    height: 40,
-    width: 110,
-    top: 280,
-    left: 210,
-    justifyContent: 'center',
-    //alignItems: 'center',
-    borderRadius: 10,
-    borderWidth: 1,
-    color: Colors.dark,
-  },
   gameButton: {
     height: 40,
     width: 140,
-    top: 600,
+    top: 560,
     left: 240,
     justifyContent: 'center',
     alignItems: 'center',
